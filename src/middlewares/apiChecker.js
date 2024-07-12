@@ -1,0 +1,15 @@
+const apiChecker = (req, res, next) => {
+    const apiKey = req.header("api-key")
+
+    if (!apiKey){
+        return res.status(401).json({ "error": "API key is missing!" })
+    }
+
+    if (apiKey != process.env.apiKey){
+        return res.status(403).json({ "error": "Invalid API key!" })
+    }
+
+    next()
+}
+
+module.exports = apiChecker;
