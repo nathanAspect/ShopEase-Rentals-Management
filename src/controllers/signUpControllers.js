@@ -20,7 +20,6 @@ const createUser = async (req, res) => {
 }
 
 
-
 const checkValidSignUp = async (req, res) => {
   var { username, fullname, password, SQ1, SQA1, SQ2, SQA2 } = req.body;
    
