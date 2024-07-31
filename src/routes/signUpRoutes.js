@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { getAllUsers, checkValidSignUp } = require('../controllers/signUpControllers');
 
-router.post('/signup', checkValidSignUp);
-router.get('/signup', getAllUsers);
+router.post('/', checkValidSignUp);
+router.get('/', getAllUsers);
 
 module.exports = router;
