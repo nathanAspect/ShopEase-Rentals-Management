@@ -30,6 +30,4 @@ const logInValidityCheck = (req, res)=>{
 
 }
 
-module.exports = {
-    logInValidityCheck,
-}
+module.exports = logInValidityCheck

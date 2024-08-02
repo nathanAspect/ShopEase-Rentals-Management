@@ -12,6 +12,6 @@ app.use(apiChecker);
 app.use('/signup', signupRoutes);
 app.use('/login', logInRoutes);
 
-
-app.use('/user', authorization, userRoutes)
+app.use(authorization);
+app.use('/user', userRoutes);
 module.exports = app;

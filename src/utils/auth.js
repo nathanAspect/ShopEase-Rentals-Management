@@ -17,7 +17,7 @@ const authentication = async (req, res) => {
         })
         
         if(!hashedPass){
-            return res.json({"message": 'Invalid!'});
+            return res.status(403).json({"message": 'Invalid!'});
         }
 
         const value = await encriptionComparision(password, hashedPass.password)
@@ -41,7 +41,7 @@ const authentication = async (req, res) => {
             return res.json({"message": "Valid!"})
 
         } else{
-            return res.json({"message": 'Invalid!'})
+            return res.status(403).json({"message": 'Invalid!'})
         }
 
     } catch(error){

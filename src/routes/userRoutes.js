@@ -2,8 +2,8 @@ const express = require('express')
 
 const router = express.Router()
 
-router.get('/', (_, res)=>{
-    res.json('happy user')
+router.get('/', ( req, res)=>{
+    res.json(req.user)
 })
 
 module.exports = router
