@@ -25,7 +25,7 @@ const logInValidityCheck = (req, res)=>{
         authentication(req, res);
 
     } catch(error){
-        return res.status(500).json({ "error": 'Error validationg log-in!'})
+        return res.status(500).json({ "message": 'Error validationg log-in!'})
     }
 
 }

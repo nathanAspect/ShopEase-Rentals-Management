@@ -1,28 +1,30 @@
 const prisma = require('../config/database');
 // the above import is a goner
 
-const { getUserElement } = require('../model/UserModel');
+const { getUserElement, createUser } = require('../model/UserModel');
 const { encryptString } = require('../utils/encription')
 
-const createUser = async (req, res) => {
+const CreateUser = async (req, res) => {
   var { username, fullname, password, SQ1, SQA1, SQ2, SQA2 } = req.newUser
   try{
     password = await encryptString(password);
     SQA1 = await encryptString(SQA1);
     SQA2 = await encryptString(SQA2);
-
+   
     const user = await createUser({ username, fullname, password, SQ1, SQA1, SQ2, SQA2});
 
     if(user){
-      return res.status(200).json({"message": 'success!'});
+      return res.status(200).json({"message": "success!"});
     }
     
-    res.status(500).json({"message": "unsuccess!"})
+    res.status(500).json({"message": "unsuccess!"});
 
   } catch(error){
-    res.status(500).json({"message": "unsuccess!"})
+    res.status(500).json({"message": "unsuccess!"});
   }
 }
+
+
 
 
 const checkValidSignUp = async (req, res) => {
@@ -71,10 +73,10 @@ const checkValidSignUp = async (req, res) => {
 
     req.newUser = { username, fullname, password, SQ1, SQA1, SQ2, SQA2 }
 
-    createUser(req, res)
+    CreateUser(req, res)
 
   } catch(error){
-    return res.status(500).json({ "error": 'Error validationg sign-up!'})
+    return res.status(500).json({ "message": 'Error validationg sign-up!'})
   }
    
 }

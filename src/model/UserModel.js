@@ -1,7 +1,7 @@
 const prisma = require("../config/database");
 
 const createUser = async data => {
-    return await prisma.user.create({ data: data })
+    return await prisma.user.create({ data: data });
 }
 
 const getUserElement = async (identifier, targets)=>{

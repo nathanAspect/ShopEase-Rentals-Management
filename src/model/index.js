@@ -1,3 +1,4 @@
 module.exports = {
-    UserModel: require('./UserModel')
+    UserModel: require('./UserModel'),
+    FolderModel: require('./FolderModel')
 }

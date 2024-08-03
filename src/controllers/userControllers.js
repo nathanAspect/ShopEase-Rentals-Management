@@ -21,7 +21,7 @@ const GetUser = async ( req, res ) => {
 
 
 const UpdateUser = () => {
-    //------------------------------------ Here creating Folder
+    //------------------------------------ updating user goes here
 }
 
 
