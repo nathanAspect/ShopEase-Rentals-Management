@@ -3,7 +3,6 @@ require('dotenv').config();
 
 const secretKey = process.env.SECRET_KEY
 
-
 const authorization = (req, res, next)=>{
 
     const token = req.cookies.token
@@ -13,7 +12,6 @@ const authorization = (req, res, next)=>{
         return res.status(403).json({"message": "User not authorized!"})
     }
         
-
     jwt.verify(token, secretKey, (err, decoded)=>{
         
         if(err){

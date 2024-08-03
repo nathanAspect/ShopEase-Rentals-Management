@@ -1,5 +1,6 @@
-const prisma = require('../config/database');
-const { encriptionComparision } = require('../utils/encription')
+const { getUserElement } = require('../model/UserModel');
+
+const { encriptionComparision } = require('./encription'); 
 const jwt = require('jsonwebtoken')
 
 const secretKey = process.env.SECRET_KEY
@@ -11,10 +12,7 @@ const authentication = async (req, res) => {
         username && (username = username.trim().toLowerCase())
         password && (password = password.trim())
 
-        const hashedPass = await prisma.user.findUnique({
-            where: { username: username },
-            select: { password: true }
-        })
+        const hashedPass = await getUserElement( {username}, {password: true});
         
         if(!hashedPass){
             return res.status(403).json({"message": 'Invalid!'});
@@ -23,11 +21,7 @@ const authentication = async (req, res) => {
         const value = await encriptionComparision(password, hashedPass.password)
         
         if(value){
-
-            const ID = await prisma.user.findUnique({
-                where: { username: username },
-                select: { id: true }
-            })
+            const ID = await getUserElement({username}, {id: true})
 
             const token = jwt.sign({ id: ID.id, username: username }, secretKey, { expiresIn: '10d' })
             
@@ -49,6 +43,4 @@ const authentication = async (req, res) => {
     }
 }
 
-module.exports = {
-    authentication,
-}
+module.exports = authentication;

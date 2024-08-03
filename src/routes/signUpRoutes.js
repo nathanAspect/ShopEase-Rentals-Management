@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const { signupControllers } = require('../controllers');
+const { signupControllers: { checkValidSignUp, getAllUsers } } = require('../controllers');
 
-router.post('/', signupControllers.checkValidSignUp);
-router.get('/', signupControllers.getAllUsers);
+router.post('/', checkValidSignUp);
+router.get('/', getAllUsers);
 
 module.exports = router;

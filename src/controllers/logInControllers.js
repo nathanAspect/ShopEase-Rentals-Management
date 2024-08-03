@@ -1,4 +1,4 @@
-const { authentication } = require('../utils/auth')
+const { authentication } = require('../utils')
 
 const logInValidityCheck = (req, res)=>{
 
@@ -22,7 +22,7 @@ const logInValidityCheck = (req, res)=>{
             return res.status(400).json({error})
         }
 
-        authentication(req, res)
+        authentication(req, res);
 
     } catch(error){
         return res.status(500).json({ "error": 'Error validationg log-in!'})

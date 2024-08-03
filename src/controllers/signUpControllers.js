@@ -1,4 +1,7 @@
 const prisma = require('../config/database');
+// the above import is a goner
+
+const { getUserElement } = require('../model/UserModel');
 const { encryptString } = require('../utils/encription')
 
 const createUser = async (req, res) => {
@@ -8,11 +11,13 @@ const createUser = async (req, res) => {
     SQA1 = await encryptString(SQA1);
     SQA2 = await encryptString(SQA2);
 
-    const user = await prisma.user.create({
-      data: { username, fullname, password, SQ1, SQA1, SQ2, SQA2  },
-    })
+    const user = await createUser({ username, fullname, password, SQ1, SQA1, SQ2, SQA2});
 
-    res.json({"message": 'success!'});
+    if(user){
+      return res.status(200).json({"message": 'success!'});
+    }
+    
+    res.status(500).json({"message": "unsuccess!"})
 
   } catch(error){
     res.status(500).json({"message": "unsuccess!"})
@@ -53,9 +58,7 @@ const checkValidSignUp = async (req, res) => {
     if(!username || username.length < 4){
       error.push('Username not fully filled!')
     } else{
-      const userExists = await prisma.user.findUnique({
-        where: { username: username }
-      })
+      const userExists = await getUserElement({username});
       
       if(userExists){
         error.push('Username not available!')
@@ -76,6 +79,10 @@ const checkValidSignUp = async (req, res) => {
    
 }
 
+
+
+
+///////////////////// THIS NEED TO BE DELETED ////////////////////////////////
 
 const getAllUsers = async (req, res)=>{
   try {
