@@ -1,5 +1,5 @@
 const express = require('express')
-const { userController: { GetUser, UpdateUser, DeleteUser } } = require('../controllers')
+const { userControllers: { GetUser, UpdateUser, DeleteUser } } = require('../controllers')
 const router = express.Router()
 
 router.get('/', GetUser);

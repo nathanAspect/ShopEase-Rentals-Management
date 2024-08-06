@@ -1,7 +1,7 @@
 const express = require('express')
 const cookieParser = require('cookie-parser')
 const { apiChecker, authorization } = require('./middlewares/')
-const {signupRoutes, logInRoutes, userRoutes } = require('./routes/')
+const {signupRoutes, logInRoutes, userRoutes, folderRoutes } = require('./routes/')
 
 const app = express();
 
@@ -14,4 +14,8 @@ app.use('/login', logInRoutes);
 
 app.use(authorization);
 app.use('/user', userRoutes);
+
+app.use('/folder', folderRoutes);
+
+
 module.exports = app;

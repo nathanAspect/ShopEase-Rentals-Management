@@ -1,4 +1,4 @@
-const { getUserElement } = require('../model/UserModel');
+const { UseModel: {getRecordElement} } = require('../model');
 
 const { encriptionComparision } = require('./encription'); 
 const jwt = require('jsonwebtoken')
@@ -12,7 +12,7 @@ const authentication = async (req, res) => {
         username && (username = username.trim().toLowerCase())
         password && (password = password.trim())
 
-        const hashedPass = await getUserElement( {username}, {password: true});
+        const hashedPass = await getRecordElement( 'user', {username}, {password: true});
         
         if(!hashedPass){
             return res.status(403).json({"message": 'Invalid!'});
@@ -21,7 +21,7 @@ const authentication = async (req, res) => {
         const value = await encriptionComparision(password, hashedPass.password)
         
         if(value){
-            const ID = await getUserElement({username}, {id: true})
+            const ID = await getRecordElement('user', {username}, {id: true})
 
             const token = jwt.sign({ id: ID.id, username: username }, secretKey, { expiresIn: '10d' })
             
@@ -32,14 +32,14 @@ const authentication = async (req, res) => {
                 sameSite: 'Strict',
             })
 
-            return res.json({"message": "Valid!"})
+            return res.status(200).json({"message": "Valid!"})
 
         } else{
             return res.status(403).json({"message": 'Invalid!'})
         }
 
     } catch(error){
-        return res.status(500).json({ "error": 'Error validationg log-in!'})
+        return res.status(500).json({ "message": 'Error validationg log-in!'})
     }
 }
 

@@ -1,5 +1,6 @@
 module.exports = {
     logInValidityCheck : require('./logInControllers'),
     signupControllers: require('./signUpControllers'),
-    userController: require('./userControllers')
+    userControllers: require('./userControllers'),
+    folderControllers: require('./folderControllers')
 }

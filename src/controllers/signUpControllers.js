@@ -1,7 +1,7 @@
 const prisma = require('../config/database');
 // the above import is a goner
 
-const { getUserElement, createUser } = require('../model/UserModel');
+const { UseModel: { createRecord, getRecordElement} } = require('../model');
 const { encryptString } = require('../utils/encription')
 
 const CreateUser = async (req, res) => {
@@ -11,7 +11,7 @@ const CreateUser = async (req, res) => {
     SQA1 = await encryptString(SQA1);
     SQA2 = await encryptString(SQA2);
    
-    const user = await createUser({ username, fullname, password, SQ1, SQA1, SQ2, SQA2});
+    const user = await createRecord('user', { username, fullname, password, SQ1, SQA1, SQ2, SQA2});
 
     if(user){
       return res.status(200).json({"message": "success!"});
@@ -60,7 +60,7 @@ const checkValidSignUp = async (req, res) => {
     if(!username || username.length < 4){
       error.push('Username not fully filled!')
     } else{
-      const userExists = await getUserElement({username});
+      const userExists = await getRecordElement('user', {username});
       
       if(userExists){
         error.push('Username not available!')
