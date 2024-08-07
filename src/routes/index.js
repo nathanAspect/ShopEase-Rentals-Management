@@ -1,6 +1,7 @@
 module.exports = {
     logInRoutes : require('./logInRoutes'),
     signupRoutes : require('./signUpRoutes'),
-    userRoutes : require('./userRoutes.js'),
-    folderRoutes : require('./folderRoutes.js')
+    userRoutes : require('./userRoutes'),
+    folderRoutes : require('./folderRoutes'),
+    shopRoutes : require('./shopRoutes.js')
 }
