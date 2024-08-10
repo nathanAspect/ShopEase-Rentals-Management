@@ -1,4 +1,5 @@
-const { UseModel: { createRecord, getRecordElement, getRecords, updateRecord, deleteRecord}} = require('../model');
+const { UseModel: { createRecord, getRecordElement, getRecords, updateRecord, deleteRecord, getDeepRecord}} = require('../model');
+
 
 const createShop = async ( req, res)=>{
     const { id: userId} = req.user;
@@ -56,10 +57,110 @@ const createShop = async ( req, res)=>{
     } catch( error){
         return res.status(500).json({ "message": 'Error creating shop!'});
     }
-
 }
 
 
+const getShops = async ( req, res)=>{
+    const { id: userId} = req.user;
+
+    try{
+        var { folderId} = req.body;
+
+        if(!folderId || (typeof folderId === 'string')){
+            return res.status(400).json({ "message": "Invalid folder Id!"});
+        }
+
+        const checkFolderAuthority = await getRecordElement('folder', { id: folderId, userId}, { id: true, userId: true});
+
+        if(!checkFolderAuthority){
+            return res.status(403).json({ "message": "User not authorized!"});
+        }
+        
+        
+        const shopResult = await getRecords('shop', { folderId}, {
+            id: true,
+            shopNumber: true,
+            clientFullName: true,
+            price: true,
+            shopType: true,
+            description: true,
+            startDate: true,
+            nextPayment: true,
+            paidMonth: true,
+            paidStatus: true
+        })
+
+        return res.status(400).json({ "message": shopResult});
+
+
+    } catch( error){
+        return res.status(500).json({ "message": 'Error creating shop!'});
+    }
+}
+
+
+const getShop = async ( req, res)=>{
+    const { id: userId_1} = req.user;
+
+    try{
+        const id = parseInt(req.params.shopId);
+
+        const { folder: { userId}} = await getDeepRecord( 'shop', { id}, 'folder', { id: true}, { userId: true});
+
+        if(userId != userId_1){
+            return res.status(403).json({ "message": "User not authorized!"});
+        }
+        
+        const shopResult = await getRecordElement('shop', { id}, {
+            id: true,
+            shopNumber: true,
+            clientFullName: true,
+            price: true,
+            shopType: true,
+            description: true,
+            startDate: true,
+            nextPayment: true,
+            paidMonth: true,
+            paidStatus: true
+        });
+
+        return res.status(200).json(shopResult);
+
+    } catch( error){
+        return res.status(500).json({ "message": 'Error fetching shop!'});
+    }
+}
+
+const updateShop = () =>{
+
+    /* -------------------- update is not done here -------------------------- */
+
+}
+
+const deleteShop = async ( req, res) => {
+    const { id: userId_1} = req.user;
+
+    try{
+        const id = parseInt(req.params.shopId);
+
+        const { folder: { userId}} = await getDeepRecord( 'shop', { id}, 'folder', { id: true}, { userId: true});
+
+        if(userId != userId_1){
+            return res.status(403).json({ "message": "User not authorized!"});
+        }
+        
+        await deleteRecord('shop', { id});
+
+        return res.status(200).json({ "message": "Shop deleted successfully!"});
+
+    } catch( error){
+        return res.status(500).json({ "message": 'Error deleting shop!'});
+    }
+}
+
 module.exports = {
     createShop,
+    getShops,
+    getShop,
+    deleteShop
 }

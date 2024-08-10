@@ -55,10 +55,10 @@ const getFolder = async ( req, res) => {
 
 
 const getFolders = async ( req, res) => {
-    const {id} = req.user;
+    const {id: userId} = req.user;
 
     try{
-        const folderResults = await getRecords( 'folder', { userId: id}, 
+        const folderResults = await getRecords( 'folder', { userId}, 
             {
                 id: true,
                 title: true,

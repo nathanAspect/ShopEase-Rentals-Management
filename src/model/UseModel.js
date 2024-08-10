@@ -52,10 +52,27 @@ const deleteRecord = async (model, identifier) => {
     }    
 }
 
+const getDeepRecord = async (model_1, identifier, model_2, target_1, target_2) => {
+    try{
+        return await prisma[model_1].findUnique({
+            where: identifier,
+            select: { ...target_1,
+                [model_2]: {
+                    select: target_2
+                }
+            },
+
+        })
+    } catch(error){
+        throw error;
+    }
+}
+
 module.exports = {
     createRecord,
     getRecordElement,
     getRecords,
     deleteRecord,
-    updateRecord
+    updateRecord,
+    getDeepRecord
 }
