@@ -3,7 +3,7 @@ const { authentication } = require('../utils')
 const logInValidityCheck = (req, res)=>{
 
     var {username, password } = req.body
-    
+
     const error = []
 
     username && (username = username.trim())

@@ -10,12 +10,11 @@ const authentication = async (req, res) => {
     
     try{
         username && (username = username.trim().toLowerCase())
-        password && (password = password.trim())
 
         const hashedPass = await getRecordElement( 'user', {username}, {password: true});
         
         if(!hashedPass){
-            return res.status(403).json({"message": 'Invalid!'});
+            return res.status(200).json({"message": 'Invalid!'});
         }
 
         const value = await encriptionComparision(password, hashedPass.password)
@@ -31,11 +30,11 @@ const authentication = async (req, res) => {
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'Strict',
             })
-
+            
             return res.status(200).json({"message": "Valid!"})
 
         } else{
-            return res.status(403).json({"message": 'Invalid!'})
+            return res.status(200).json({"message": 'Invalid!'})
         }
 
     } catch(error){
