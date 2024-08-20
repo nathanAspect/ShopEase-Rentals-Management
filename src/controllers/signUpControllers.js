@@ -82,7 +82,22 @@ const checkValidSignUp = async (req, res) => {
 }
 
 
+const checkUsername = async ( req, res)=>{
+  try{
+    const username = req.params.username;
 
+    const userExists = await getRecordElement('user', {username});
+
+    if(!userExists){
+      return res.status(200).json({ "message": "available."})
+    }
+
+    return res.status(200).json({ "message": "unavailable."})
+
+  }catch(error){
+    return res.status(500).json({ "message": 'Error checking username!'})
+  }
+}
 
 ///////////////////// THIS NEED TO BE DELETED ////////////////////////////////
 
@@ -98,5 +113,7 @@ const getAllUsers = async (req, res)=>{
 
 module.exports = {
   checkValidSignUp,
+  checkUsername,
+
   getAllUsers,
 };

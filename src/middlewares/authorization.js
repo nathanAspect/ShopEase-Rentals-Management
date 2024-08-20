@@ -8,7 +8,6 @@ const authorization = (req, res, next)=>{
     const token = req.cookies.token
 
     if(!token){
-        console.log('cookie not found')
         return res.status(403).json({"message": "User not authorized!"})
     }
         
