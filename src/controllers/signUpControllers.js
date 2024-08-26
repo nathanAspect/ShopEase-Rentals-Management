@@ -17,10 +17,10 @@ const CreateUser = async (req, res) => {
       return res.status(200).json({"message": "success!"});
     }
     
-    res.status(500).json({"message": "unsuccess!"});
+    res.status(200).json({"message": "unsuccess!"});
 
   } catch(error){
-    res.status(500).json({"message": "unsuccess!"});
+    res.status(200).json({"message": "unsuccess!"});
   }
 }
 
@@ -68,7 +68,7 @@ const checkValidSignUp = async (req, res) => {
     }
 
     if(error.length){
-      return res.status(400).json({error})
+      return res.status(200).json({message: error})
     }
 
     req.newUser = { username, fullname, password, SQ1, SQA1, SQ2, SQA2 }
@@ -84,7 +84,7 @@ const checkValidSignUp = async (req, res) => {
 
 const checkUsername = async ( req, res)=>{
   try{
-    const username = req.params.username;
+    const username = req.params.username.trim().toLowerCase();
 
     const userExists = await getRecordElement('user', {username});
 
