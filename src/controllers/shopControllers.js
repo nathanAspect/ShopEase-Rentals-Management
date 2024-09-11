@@ -45,7 +45,7 @@ const createShop = async ( req, res)=>{
         const checkFolderAuthority = await getRecordElement('folder', { id: folderId, userId}, { id: true, userId: true});
 
         if(!checkFolderAuthority){
-            return res.status(403).json({ "message": "User not authorized!"});
+            return res.status(200).json({ "message": "Folder not found!"});
         }
 
         const shopResult = await createRecord('shop', { folderId, shopNumber, clientFullName, price, shopType, description});
@@ -63,7 +63,8 @@ const activateShop = async ( req, res)=>{
     const { id: userId} = req.user;
 
     try{
-        const { id, startDate, paidMonth } = req.body;
+        const id = parseInt(req.params.shopId);
+        const { startDate, paidMonth } = req.body;
 
         const startDateObj = new Date(startDate);
         const nextPaymentDay = paidMonth * 30;
@@ -76,7 +77,7 @@ const activateShop = async ( req, res)=>{
             { folder: { select: { userId: true } } })
 
         if (shop && shop.folder.userId !== userId) {
-            return res.status(403).json({ "message": "User not authorized!"});
+            return res.status(403).json({ "message": "Shop not found!"});
         } 
 
 
@@ -113,20 +114,11 @@ const getShops = async ( req, res)=>{
     const { id: userId} = req.user;
 
     try{
-        var { folderId} = req.body;
-
-        if(!folderId || (typeof folderId === 'string')){
-            return res.status(400).json({ "message": "Invalid folder Id!"});
-        }
-
-        const checkFolderAuthority = await getRecordElement('folder', { id: folderId, userId}, { id: true, userId: true});
-
-        if(!checkFolderAuthority){
-            return res.status(200).json({ "message": "User not authorized!"});
-        }
         
         
-        const shopResult = await getRecords('shop', { folderId}, {
+        const shopResult = await getRecords('shop', { 
+            folder: { userId}
+        }, {
             id: true,
             shopNumber: true,
             clientFullName: true,
@@ -139,11 +131,11 @@ const getShops = async ( req, res)=>{
             paidStatus: true
         })
 
-        return res.status(200).json({ "message": shopResult});
+        return res.status(200).json({ shopResult});
 
 
     } catch( error){
-        return res.status(500).json({ "message": 'Error creating shop!'});
+        return res.status(500).json({ "message": 'Error fetching shop!'});
     }
 }
 

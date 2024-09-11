@@ -19,7 +19,7 @@ const createFolder = async ( req, res ) => {
         }
 
         if(error.length){
-            return res.status(400).json(error)
+            return res.status(200).json(error)
         }
 
         const newFolder = await createRecord('folder', { title, description, userId: id});
@@ -47,9 +47,48 @@ const getFolder = async ( req, res) => {
             return res.status(200).json(folderResult);
         }
 
-        return res.status(403).json({ "message": "Folder not found!"});
+        return res.status(200).json({ "message": "Folder not found!"});
     } catch( error){
         return res.status(500).json({ "message": 'Error Fetching folder!'});
+    }
+}
+
+
+const getFolderShops = async ( req, res) => {
+    const {id: userId} = req.user;
+    const folderId = parseInt(req.params.folderId);
+
+    try{
+
+        const checkFolderAuthority = await getRecordElement('folder', { id: folderId, userId}, { id: true, userId: true});
+
+        if(!checkFolderAuthority){
+            return res.status(200).json({ "message": "Folder not found!"});
+        }
+
+        const shopResult = await getRecords('shop', {
+            folderId,
+            folder: {
+                userId
+            }
+        },{
+            id: true,
+            folderId: true,
+            shopNumber: true,
+            clientFullName: true,
+            price: true,
+            shopType: true,
+            description: true,
+            dealStarted: true,
+            startDate: true,
+            nextPayment: true,
+            paidMonth: true,
+            paidStatus: true,
+        })
+
+        return res.status(200).json(shopResult);
+    } catch( error){
+        return res.status(500).json({ "message": 'Error Fetching shops!'});
     }
 }
 
@@ -109,6 +148,7 @@ const deleteFolder = async ( req, res) => {
 module.exports = {
     createFolder,
     getFolder,
+    getFolderShops,
     getFolders,
     updateFolder,
     deleteFolder

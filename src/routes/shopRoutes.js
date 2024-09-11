@@ -6,6 +6,6 @@ router.post('/', createShop);
 router.get('/:shopId', getShop);
 router.get('/', getShops);
 router.delete('/:shopId', deleteShop);
-router.patch('/', activateShop);
+router.patch('/:shopId', activateShop);
 
 module.exports = router;
