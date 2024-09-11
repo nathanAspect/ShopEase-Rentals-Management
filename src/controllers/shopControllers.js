@@ -48,10 +48,10 @@ const createShop = async ( req, res)=>{
             return res.status(403).json({ "message": "User not authorized!"});
         }
 
-        await createRecord('shop', { folderId, shopNumber, clientFullName, price, shopType, description});
+        const shopResult = await createRecord('shop', { folderId, shopNumber, clientFullName, price, shopType, description});
 
         
-        return res.status(200).json({ "message": "Shop created successfully!"});
+        return res.status(200).json(shopResult);
 
 
     } catch( error){
@@ -59,6 +59,55 @@ const createShop = async ( req, res)=>{
     }
 }
 
+const activateShop = async ( req, res)=>{
+    const { id: userId} = req.user;
+
+    try{
+        const { id, startDate, paidMonth } = req.body;
+
+        const startDateObj = new Date(startDate);
+        const nextPaymentDay = paidMonth * 30;
+
+        var nextPayment = new Date(startDate);
+        nextPayment.setDate(nextPayment.getDate() + nextPaymentDay);
+
+        const shop = await getRecordElement('shop', 
+            { id }, 
+            { folder: { select: { userId: true } } })
+
+        if (shop && shop.folder.userId !== userId) {
+            return res.status(403).json({ "message": "User not authorized!"});
+        } 
+
+
+        const result = await updateRecord('shop', {id}, {
+            dealStarted: true,
+            startDate: startDateObj,
+            nextPayment: nextPayment,
+            paidMonth: paidMonth,
+            paidStatus: true,
+        }, {
+            id: true,
+            folderId: true,
+            shopNumber: true,
+            clientFullName: true,
+            price: true,
+            shopType: true,
+            description: true,
+            dealStarted: true,
+            startDate: true,
+            nextPayment: true,
+            paidMonth: true,
+            paidStatus: true,
+        })
+
+        res.status(200).json({ "message": result});
+
+    } catch( error){
+        console.log(error)
+        return res.status(500).json({ "message": 'Error activation shop deal!'});
+    }
+}
 
 const getShops = async ( req, res)=>{
     const { id: userId} = req.user;
@@ -73,7 +122,7 @@ const getShops = async ( req, res)=>{
         const checkFolderAuthority = await getRecordElement('folder', { id: folderId, userId}, { id: true, userId: true});
 
         if(!checkFolderAuthority){
-            return res.status(403).json({ "message": "User not authorized!"});
+            return res.status(200).json({ "message": "User not authorized!"});
         }
         
         
@@ -90,7 +139,7 @@ const getShops = async ( req, res)=>{
             paidStatus: true
         })
 
-        return res.status(400).json({ "message": shopResult});
+        return res.status(200).json({ "message": shopResult});
 
 
     } catch( error){
@@ -160,6 +209,7 @@ const deleteShop = async ( req, res) => {
 
 module.exports = {
     createShop,
+    activateShop,
     getShops,
     getShop,
     deleteShop

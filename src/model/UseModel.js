@@ -68,11 +68,25 @@ const getDeepRecord = async (model_1, identifier, model_2, target_1, target_2) =
     }
 }
 
+const getDeepRecords = async (model_1, identifier, model_2) => {
+    try{
+        return await prisma[model_1].findMany({
+            where: identifier,
+            include: {
+              [model_2]: true,  // Include related shops in the result
+            },
+          });
+    } catch(error){
+        throw error;
+    }
+}
+
 module.exports = {
     createRecord,
     getRecordElement,
     getRecords,
     deleteRecord,
     updateRecord,
-    getDeepRecord
+    getDeepRecord,
+    getDeepRecords
 }

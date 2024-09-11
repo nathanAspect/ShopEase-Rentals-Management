@@ -3,5 +3,6 @@ module.exports = {
     signupControllers: require('./signUpControllers'),
     userControllers: require('./userControllers'),
     folderControllers: require('./folderControllers'),
-    shopRoutes: require('./shopControllers')
+    shopControllers: require('./shopControllers'),
+    notificationControllers: require('./notificationControllers')
 }
